@@ -1,12 +1,14 @@
 <h1>Articles</h1>
 
-<ul>
   <% @articles.each do |article| %>
-    <li>
-      <a href="<%= article_path(article) %>">
-        <%= article.title %>
+      <h3>
+        <a href="<%= article_path(article) %>">
+          <%= article.title %>
+        </a>
+      </h3>
+      <a href="<%= edit_article_path(article) %>">
+        edit
       </a>
-    </li>
   <% end %>
-</ul>
 <a href= '/articles/new'>create a new article </a>
+
