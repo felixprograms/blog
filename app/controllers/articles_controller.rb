@@ -1,3 +1,4 @@
+
 class ArticlesController < ApplicationController
     def index
       @articles = Article.all
@@ -18,6 +19,11 @@ class ArticlesController < ApplicationController
       else
         render :new
       end
+    end
+
+    def destroy
+      Article.find(params[:id]).destroy
+      redirect_to '/articles'
     end
 
 
