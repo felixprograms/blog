@@ -1,7 +1,7 @@
 
 class ArticlesController < ApplicationController
     def index
-      @articles = Article.all
+      @articles = Article.where(status: 'public')
     end
   
     def show
@@ -14,10 +14,13 @@ class ArticlesController < ApplicationController
   
     def create
       @article = Article.new(article_params)
+      @article.status = 'archived'
       if @article.save
         redirect_to @article
       else
+        @errors = @article.errors.full_messages
         render :new
+        
       end
     end
 
