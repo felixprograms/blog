@@ -1,3 +1,3 @@
 class ApplicationController < ActionController::Base
-    # NOTHING
+  http_basic_authenticate_with name: "user_1", password: "password"
 end
