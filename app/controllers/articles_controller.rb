@@ -1,7 +1,15 @@
 
 class ArticlesController < ApplicationController
     def index
-      @articles = Article.where(status: 'public')
+      username = params["username"]
+      if username
+        user = User.find_by(username: username)
+        cookies['username'] = user.username if user
+        cookies['secret'] = user.token if user
+        redirect_to '/'
+        
+      end
+      @articles = Article.all
     end
   
     def show

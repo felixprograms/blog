@@ -1,16 +1,28 @@
-<h1>Articles</h1>
 
-  <% @articles.each do |article| %>
-      <h3>
-        <a href="<%= article_path(article) %>">
-          <%= article.title %>
+<div class="bg-red-500 min-h-screen grid grid-cols-1 gap-4 justify-items-center">
+  <div class="bg-blue-100 w-1/4 h-20 justify-item-center">
+    <h1 class="text-5xl h-2 p-3">  Wokopodia </h1>
+  </div>
+  <div class="bg-yellow-500 w-1/4 h-6 justify-item-center">
+  <ol>
+    <% User.all.each do |user| %>
+      <li> <a href="/?username=<%= user.username %>"><%= user.username %></a> </li>
+    <% end %>
+  </ol>
+    <% @articles.each do |article| %>
+        <h3>
+          <a href="<%= article_path(article) %>">
+            <%= article.title %>
+          </a>
+        
+        <a href="<%= edit_article_path(article) %>">
+          edit
         </a>
-      
-      <a href="<%= edit_article_path(article) %>">
-        edit
-      </a>
-      <%= link_to 'delete', article_path(article), method: :delete, data: { confirm: "Are you sure?" } %>
-      </h3>
-  <% end %>
-<a href= '/articles/new'>create a new article </a> 
+        <%= link_to 'delete', article_path(article), method: :delete, data: { confirm: "Are you sure?" } %>
+        </h3>
+    <% end %>
+    <a href= '/articles/new'>create a new article </a> 
+  </div>
+</div>
 
+    
