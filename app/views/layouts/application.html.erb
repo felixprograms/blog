@@ -12,8 +12,13 @@
   </head>
 
   <body>
+    <% if @errors.present? %>
+      <% @errors.each do |errrror| %>
+        <%= errrror  %> 
+      <% end %>
+
+    <% end %>
     <%= render 'layouts/navigation_bar' %>
-    You haven't logged in yet.
     <%= yield %>
   </body>
 </html>

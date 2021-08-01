@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
     helper_method :current_user
     skip_forgery_protection
     def current_user
-        User.find_by(token: cookies['secret']).username
+        if User.find_by(token: cookies['secret'])
+            User.find_by(token: cookies['secret']).username
+        else
+            nil
+        end
     end
+
+    
 end
