@@ -20,6 +20,7 @@ class UsersController < ApplicationController
     end
     def logout
         cookies['secret'] = nil
+        current_user.update_token if current_user
         redirect_to '/'
     end
 
