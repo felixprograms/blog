@@ -8,6 +8,22 @@ class User < ApplicationRecord
     end
 
     def update_token
-        update(token: SecureRandom.urlsafe_base64)  
+        update(token: SecureRandom.urlsafe_base64)
+    end
+
+    def admin?
+        user_type == "admin"
+    end
+
+    def editor?
+        user_type == "editor"
+    end
+
+    def reader?
+        user_type == "reader"
+    end
+
+    def writer?
+        user_type == "writer"
     end
 end
