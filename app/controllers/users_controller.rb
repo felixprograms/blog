@@ -25,6 +25,15 @@ class UsersController < ApplicationController
     end
 
     def create
-        byebug
+        if user = User.create(user_params)
+            cookies['secret'] = user.token
+            redirect_to '/'
+        end
+
     end
+
+    private
+        def user_params
+            params.permit(:username, :password)
+        end
 end

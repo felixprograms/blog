@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    before_create :set_default_user_type, :set_new_token
+
     def set_password(plain_text_password)
         self.update(password: BCrypt::Password.create(plain_text_password))
     end
@@ -25,5 +27,13 @@ class User < ApplicationRecord
 
     def writer?
         user_type == "writer"
+    end
+
+    def set_default_user_type
+        self.user_type = "reader"
+    end
+
+    def set_new_token
+        self.token = SecureRandom.urlsafe_base64
     end
 end
