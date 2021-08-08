@@ -12,11 +12,10 @@
   </head>
 
   <body>
-    <% if @errors.present? %>
-      <% @errors.each do |errrror| %>
-        <%= errrror  %> 
-      <% end %>
-
+    <% flash.each do |type, msg| %>
+      <div>
+        <%= msg %>
+      </div>
     <% end %>
     <%= render 'layouts/navigation_bar' %>
     <%= yield %>

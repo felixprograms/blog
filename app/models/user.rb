@@ -1,5 +1,9 @@
 class User < ApplicationRecord
-    before_create :set_default_user_type, :set_new_token
+    before_create :set_default_user_type, :set_new_token, :hash_password
+    validates :username, presence: true
+    validates :password, presence: true
+
+    validates :username, uniqueness: true
 
     def set_password(plain_text_password)
         self.update(password: BCrypt::Password.create(plain_text_password))
@@ -35,5 +39,12 @@ class User < ApplicationRecord
 
     def set_new_token
         self.token = SecureRandom.urlsafe_base64
+    end
+
+    def hash_password
+        
+        if self.password.length > 0
+            self.password = BCrypt::Password.create(self.password)
+        end
     end
 end

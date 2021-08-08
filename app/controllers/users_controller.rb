@@ -25,9 +25,13 @@ class UsersController < ApplicationController
     end
 
     def create
-        if user = User.create(user_params)
+        user = User.create(user_params)
+        if user.valid?
             cookies['secret'] = user.token
             redirect_to '/'
+        else
+            flash[:errors] = user.errors.full_messages
+            redirect_to '/create_user'
         end
 
     end
