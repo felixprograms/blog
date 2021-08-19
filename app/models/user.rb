@@ -2,7 +2,7 @@ class User < ApplicationRecord
     before_create :set_default_user_type, :set_new_token, :hash_password
     validates :username, presence: true
     validates :password, presence: true
-
+    has_many :articles
     validates :username, uniqueness: true
 
     def set_password(plain_text_password)
