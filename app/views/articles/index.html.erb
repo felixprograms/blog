@@ -1,13 +1,14 @@
 
-<div class="bg-red-500 min-h-screen grid grid-cols-1 gap-4 justify-items-center">
-  <div class="bg-blue-100 w-1/4 h-20 justify-item-center rounded-full">
-    <h1 class="text-5xl h-2 text-center p-2">  Wokopodia </h1>
+<div class="bg-gradient-to-r from-green-400 via-yellow-500 to-indigo-500">
+  <div class="bg-gradient-to-r from-yellow-400 via-blue-500 to-pink-500">
+    <h1 class=" h-96 text-center p-6 text-7xl">  ArticlesHub </h1>
   </div>
-  <div class="bg-yellow-500 w-1/4 h-6 justify-item-center">
   <ol>
     
   </ol>
-    <% @articles.each do |article| %>
+    <%
+=begin%>
+ <% @articles.each do |article| %>
         <h3>
           <a href="<%= article_path(article) %>">
             <%= article.title %>
@@ -20,7 +21,13 @@
         </h3>
     <% end %>
     <a href= '/articles/new'>create a new article </a> 
-  </div>
+  </div> 
+<%
+=end%>
+<a href= '/dashboard'> Articles Dashbaord </a>
+<br/>
+<a href= '/all_articles'> View The Articles </a>
+
 </div>
 
     

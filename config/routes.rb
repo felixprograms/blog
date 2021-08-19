@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   post '/create_user', to: 'users#create'
   get '/logout', to: 'users#logout'
   get '/dashboard', to: 'dashboard#index'
+  get '/all_articles', to: 'articles#a'
 end
