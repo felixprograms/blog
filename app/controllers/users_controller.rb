@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     def signed_in
         user = User.find_by(username: params[:username])
         if user == nil
-            @errors = ['Username is not found.']
+            flash[:errors] = ['Username is not found.']
             render 'index'      
 
         else

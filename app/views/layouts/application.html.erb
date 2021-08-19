@@ -13,9 +13,12 @@
 
   <body>
     <% flash.each do |type, msg| %>
-      <div>
-        <%= msg %>
-      </div>
+      <% msg.each do |m| %>
+        <div class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <%= m %>
+        </div>
+      <% end %>
+
     <% end %>
     <%= render 'layouts/navigation_bar' %>
     <%= yield %>
