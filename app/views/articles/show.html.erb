@@ -1,13 +1,10 @@
-<h1><%= @article.title %></h1>
-<h3><%= @article.status %></h3>
-
-
-
-<p><%= @article.body %></p>
+<h1> <%= @article.title %></h1>
+<br/>
+<h5><%= @article.body %></h5>
 
 <ul>
-  <li><%= link_to "Edit", edit_article_path(@article) %></li>
-  <li><%= link_to "Destroy", article_path(@article),
+  <li class="bg-yellow-500 text-blue hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"><%= link_to "Edit", edit_article_path(@article) %></li>
+  <li class="bg-green-500 text-blue hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"><%= link_to "Destroy", article_path(@article),
                   method: :delete,
                   data: { confirm: "Are you sure?" } %></li>
 </ul>
