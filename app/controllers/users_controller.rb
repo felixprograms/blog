@@ -27,6 +27,9 @@ class UsersController < ApplicationController
     def create
         user = User.create(user_params)
         if user.valid?
+            
+            UserNotifierMailer.send_signup_email(user).deliver_now
+            
             cookies['secret'] = user.token
             redirect_to '/'
         else
