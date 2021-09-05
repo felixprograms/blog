@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    before_create :set_default_user_type, :set_new_token, :hash_password
+    before_create :set_default_user_type, :set_new_token, :hash_password, :set_default_verification, :set_v_token
     validates :username, presence: true
     validates :password, presence: true
     has_many :articles
@@ -46,5 +46,13 @@ class User < ApplicationRecord
         if self.password.length > 0
             self.password = BCrypt::Password.create(self.password)
         end
+    end
+
+    def set_default_verification
+        self.verify_status = false
+    end
+
+    def set_v_token
+        self.verify_token = SecureRandom.urlsafe_base64
     end
 end
