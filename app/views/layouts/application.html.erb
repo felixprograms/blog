@@ -30,9 +30,26 @@
   </body>
 </html>
 <script>
-
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
   setInterval(function(){
     document.getElementById("clock").innerText = new Date()
   },1000)
+  let item = localStorage.getItem('visits')
+  let random1 = getRandomInt(1000)
+  let random2 = getRandomInt(1000)
+  if(item == null) {
+    let result = window.prompt(`${random1} + ${random2}`)
+    if(result == random1 + random2) {
+      localStorage.setItem('visits', 0)
+
+
+    } else {
+      window.location.replace('https://google.com')
+    }
+
+
+  }
 
 </script>
