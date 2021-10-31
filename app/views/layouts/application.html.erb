@@ -22,8 +22,9 @@
     <% end %>
     <%= render 'layouts/navigation_bar' %>
     <%= yield %>
-    <%= VisitorCounter.count %>
-    
+    <div class="bg-red-500 text-green hover:bg-green-700 hover:text-black px-3 py-2 rounded-md text-sm font-medium">
+      <%= VisitorCounter.count %>
+    </div>    
     
     
 
@@ -36,18 +37,23 @@
   setInterval(function(){
     document.getElementById("clock").innerText = new Date()
   },1000)
-  let item = localStorage.getItem('visits')
-  let random1 = getRandomInt(1000)
-  let random2 = getRandomInt(1000)
-  if(item == null) {
+
+  function challenge() {
+    let random1 = getRandomInt(1000)
+    let random2 = getRandomInt(1000)
     let result = window.prompt(`${random1} + ${random2}`)
     if(result == random1 + random2) {
       localStorage.setItem('visits', 0)
 
 
     } else {
-      window.location.replace('https://google.com')
+      challenge()
     }
+  }
+  let item = localStorage.getItem('visits')
+
+  if(item == null) {
+    challenge()
 
 
   }

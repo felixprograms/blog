@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   get '/logout', to: 'users#logout'
   get '/dashboard', to: 'dashboard#index'
   get '/all_articles', to: 'articles#a'
+  get '/todos', to: 'todos#index'
 end
