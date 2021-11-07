@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'dashboard#index'
   get '/all_articles', to: 'articles#a'
   get '/todos', to: 'todos#index'
+  get '/tictactoe', to: 'tictactoe#tictactoe'
 end
