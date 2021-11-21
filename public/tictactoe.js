@@ -10,21 +10,18 @@ function checkIfPlayerWon(player) {
             gameState[index] == player
         )) {
             document.querySelector('#game-status').innerHTML = `${player} Won`
-
+            anyoneWon = true
             draw()
         }
     })
 }
 
 function handleClick(event) {
-    if (event.target.innerHTML != '') return
+    if (event.target.innerHTML != '' || anyoneWon) return
     // console.log(event.target.dataset.index)
     console.log(event.target.innerHTML)
-    if (document.querySelector('#game-status').innerHTML != `X Won`) {
-        gameState[event.target.dataset.index] = currentPlayer
-    } else {
-        gamestate = ['','','','','','','','','']
-    }
+    gameState[event.target.dataset.index] = currentPlayer
+
     draw()
     if (currentPlayer == "X") {
         currentPlayer = "0"
@@ -40,12 +37,12 @@ function handleClick(event) {
 
     
     checkIfPlayerWon("X")
-    checkIfPlayerWon("O")
+    checkIfPlayerWon("0")
 
     
 
 }
-
+let anyoneWon = false
 let gameState = ['','','','','','','','','']
 function draw () {
     document.querySelectorAll('.tictactoe-cell').forEach(cell => {
@@ -61,4 +58,5 @@ document.querySelectorAll('.tictactoe-cell').forEach(cell => {
 document.querySelector('#reset-game').addEventListener('click', function() {
     gameState = ['','','','','','','','','']
     draw()
+    anyoneWon = false
 })    
