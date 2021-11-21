@@ -1,0 +1,12 @@
+
+<div class="w-100">
+    
+   <% 100.times.each do |row| %>
+        <div class="flex items-center justify-center">
+            <% 100.times.each do |column| %>
+                <div class="h-1 w-1" data-index='<%= row*100 + column %>'></div>
+            <% end %>
+        </div>
+   <% end %>
+</div>
+<script src="/snake.js"></script>
