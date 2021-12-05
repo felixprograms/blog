@@ -13,13 +13,17 @@ window.addEventListener("keyup", function(event) {
     // p.textContent = `KeyboardEvent: key='${event.key}' | code='${event.code}'`;
     // document.getElementById("output").appendChild(p)
     if (event.key == 'ArrowUp'){
-        y -= 1
+        y = -1
+        x = 0
     } else if (event.key == 'ArrowDown'){
-        y += 1
+        y = 1
+        x = 0
     } else if (event.key == 'ArrowLeft'){
-        x -= 1
+        x = -1
+        y = 0
     } else if (event.key == 'ArrowRight'){
-        x += 1
+        x = 1
+        y = 0
     }
 
 }, true);
