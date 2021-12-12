@@ -23,7 +23,7 @@ setInterval(() => {
         currentBox.classList.remove('bg-black')
 
         if (currentBox.classList.contains('bg-red-900')){
-            snakeLength += 1
+            snakeLength += 554
             currentBox.classList.remove('bg-red-900')
 
         }
@@ -36,7 +36,7 @@ setInterval(() => {
     nextBox.classList.add('bg-black')
 
 
-}, 250);
+}, 0.01);
 let audioObj = new Audio('/3.wav') 
 audioObj.volume = 0.3
 window.addEventListener("keyup", function(event) {
