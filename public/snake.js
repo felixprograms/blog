@@ -15,15 +15,17 @@ for (let i = 0; i < 100; i += 1) {
 
 
 
-setInterval(() => {
+var snakeStart = function () {
     snakeBody.unshift(index)
+
+
     if (snakeBody.length > snakeLength){
         let removedIndex = snakeBody.pop()
         let currentBox = document.querySelector(`[data-index='${removedIndex}']`)
         currentBox.classList.remove('bg-black')
 
         if (currentBox.classList.contains('bg-red-900')){
-            snakeLength += 554
+            snakeLength += 1
             currentBox.classList.remove('bg-red-900')
 
         }
@@ -36,7 +38,10 @@ setInterval(() => {
     nextBox.classList.add('bg-black')
 
 
-}, 0.01);
+};
+
+var qwerty = setInterval(snakeStart, 100)
+
 let audioObj = new Audio('/3.wav') 
 audioObj.volume = 0.3
 window.addEventListener("keyup", function(event) {
@@ -55,6 +60,10 @@ window.addEventListener("keyup", function(event) {
     } else if (event.key == 'ArrowRight' && x != -1){
         x = 1
         y = 0
+    } else if (event.key == 'q'){
+        clearInterval(qwerty)
+    } else if (event.key == 's'){
+        qwerty = setInterval(snakeStart, 100)
     }
 
 }, true);
