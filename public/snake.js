@@ -21,7 +21,7 @@ let postScore = function(time) {
     fetch("/game/highscore", {
     method: "POST",
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ timer: time })
+    body: JSON.stringify({ score: time, game: 'snake' })
     }).then(res => {
     console.log("Request complete! response:", res);
     })

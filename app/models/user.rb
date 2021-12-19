@@ -3,6 +3,7 @@ class User < ApplicationRecord
     validates :username, presence: true
     validates :password, presence: true
     has_many :articles
+    has_many :scores
     validates :username, uniqueness: true
 
     def set_password(plain_text_password)

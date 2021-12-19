@@ -8,6 +8,8 @@ class GameController < ApplicationController
     end
 
     def highscore
-    
+        score = params[:score]
+        game = params[:game]
+        Score.create!(score: score, game: game, user: current_user)
     end
 end

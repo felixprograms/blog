@@ -13,8 +13,14 @@
         </div>
    <% end %>
 </div>
-
-
+<h1>High Scores</h1>
+<% Score.all.each do |score| %>
+    <div>
+        <%= score.user.username %>
+        <%= score.score %>
+        <%= score.created_at %>
+    </div>
+<% end %>
 <div id='output'>
 
 </div>
