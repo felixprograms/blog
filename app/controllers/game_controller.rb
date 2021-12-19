@@ -6,4 +6,8 @@ class GameController < ApplicationController
     def snake
 
     end
+
+    def highscore
+    
+    end
 end

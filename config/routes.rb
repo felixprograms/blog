@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   get '/todos', to: 'todos#index'
   get '/tictactoe', to: 'game#tictactoe'
   get '/snake', to: 'game#snake'
+  post '/game/highscore', to: 'game#highscore' 
 end

@@ -6,7 +6,8 @@ let column = 0
 let snakeLength = 1
 let snakeBody = []
 let snakeFood = []
-let foodNo = 5
+let foodNo = 1
+let timer = document.querySelector('#timer')
 while (snakeFood.length < foodNo) {
     let randomIndex = Math.floor(Math.random() * 100)
     if (snakeFood.indexOf(randomIndex) == -1) {
@@ -14,6 +15,16 @@ while (snakeFood.length < foodNo) {
         let foodBox = document.querySelector(`[data-index='${randomIndex}']`)
         foodBox.classList.add('bg-red-900')
     }
+}
+
+let postScore = function(time) {
+    fetch("/game/highscore", {
+    method: "POST",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ timer: time })
+    }).then(res => {
+    console.log("Request complete! response:", res);
+    })
 }
 
 var snakeStart = function () {
@@ -50,12 +61,18 @@ var snakeStart = function () {
 
     if (snakeLength > foodNo) {
         clearInterval(snakePlay)
-        alert('You Won!')
+        postScore(timer.innerHTML)
+        alert(`You Won! ${timer.innerHTML}`)
         return location.reload()
     }
     nextBox.classList.add('bg-black')
 };
 
+setInterval(function (){
+    
+    timer.innerHTML = parseInt(timer.innerHTML) + 1
+
+},1000)
 var snakePlay = setInterval(snakeStart, 200)
 
 let audioObj = new Audio('/3.wav')
