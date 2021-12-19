@@ -6,7 +6,7 @@ let column = 0
 let snakeLength = 1
 let snakeBody = []
 let snakeFood = []
-let foodNo = 1
+let foodNo = 10
 let timer = document.querySelector('#timer')
 while (snakeFood.length < foodNo) {
     let randomIndex = Math.floor(Math.random() * 100)
