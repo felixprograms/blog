@@ -1,53 +1,66 @@
 let index = 0
 let x = 0
-let y = 0
-let snakeLength = 3
+let y = 1
+let row = 0
+let column = 0
+let snakeLength = 1
 let snakeBody = []
 let snakeFood = []
-
-for (let i = 0; i < 100; i += 1) {
-    let randomIndex = Math.floor(Math.random() * 10000)
-    snakeFood.push(randomIndex)
-    let foodBox = document.querySelector(`[data-index='${randomIndex}']`)
-    foodBox.classList.add('bg-red-900')
-
+let foodNo = 5
+while (snakeFood.length < foodNo) {
+    let randomIndex = Math.floor(Math.random() * 100)
+    if (snakeFood.indexOf(randomIndex) == -1) {
+        snakeFood.push(randomIndex)
+        let foodBox = document.querySelector(`[data-index='${randomIndex}']`)
+        foodBox.classList.add('bg-red-900')
+    }
 }
-
-
 
 var snakeStart = function () {
     snakeBody.unshift(index)
 
+    row += y
+    row %= 10
+    if (row < 0) row += 10
+
+    column += x
+    column %= 10
+    if (column < 0) column += 10
+
+    index = column + (row * 10)
+
+    if (snakeBody.indexOf(index) !== -1) {
+        clearInterval(snakePlay)
+        alert('Game Over!')
+        return location.reload()
+    }
 
     if (snakeBody.length > snakeLength){
         let removedIndex = snakeBody.pop()
-        let currentBox = document.querySelector(`[data-index='${removedIndex}']`)
-        currentBox.classList.remove('bg-black')
-
-        if (currentBox.classList.contains('bg-red-900')){
-            snakeLength += 1
-            currentBox.classList.remove('bg-red-900')
-
-        }
-
+        let removedBox = document.querySelector(`[data-index='${removedIndex}']`)
+        removedBox.classList.remove('bg-black')
     }
-    index += y*100
-    index += x
+
     let nextBox = document.querySelector(`[data-index='${index}']`)
+    if (nextBox.classList.contains('bg-red-900')){
+        nextBox.classList.remove('bg-red-900')
+        snakeLength += 1
+        audioObj.play()
+    }
 
+    if (snakeLength > foodNo) {
+        clearInterval(snakePlay)
+        alert('You Won!')
+        return location.reload()
+    }
     nextBox.classList.add('bg-black')
-
-
 };
 
-var qwerty = setInterval(snakeStart, 100)
+var snakePlay = setInterval(snakeStart, 200)
 
-let audioObj = new Audio('/3.wav') 
+let audioObj = new Audio('/3.wav')
 audioObj.volume = 0.3
 window.addEventListener("keyup", function(event) {
-    // const p = document.createElement("p");
-    // p.textContent = `KeyboardEvent: key='${event.key}' | code='${event.code}'`;
-    // document.getElementById("output").appendChild(p)
     if (event.key == 'ArrowUp' && y != 1){
         y = -1
         x = 0
@@ -60,13 +73,14 @@ window.addEventListener("keyup", function(event) {
     } else if (event.key == 'ArrowRight' && x != -1){
         x = 1
         y = 0
-    } else if (event.key == 'q'){
-        clearInterval(qwerty)
+    } else if (event.key == 'p'){
+        clearInterval(snakePlay)
     } else if (event.key == 's'){
-        qwerty = setInterval(snakeStart, 100)
+        snakePlay = setInterval(snakeStart, 200)
     }
 
 }, true);
+
 
 
 
