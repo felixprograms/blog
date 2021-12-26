@@ -14,9 +14,9 @@
    <% end %>
 </div>
 <h1>High Scores</h1>
-<% Score.all.each do |score| %>
+<% Score.all.sort_by {|score| score.score.to_i }[0..9].each do |score| %>
     <div>
-        <%= score.user.username %>
+        <%= score.user.nil? ? "unregistered" : score.user.username %>
         <%= score.score %>
         <%= score.created_at %>
     </div>
