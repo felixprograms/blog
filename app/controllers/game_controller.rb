@@ -7,6 +7,10 @@ class GameController < ApplicationController
 
     end
 
+    def space
+        
+    end
+
     def highscore
         score = params[:score]
         game = params[:game]
