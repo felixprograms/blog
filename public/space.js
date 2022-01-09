@@ -13,11 +13,40 @@ function Hero(x, y) {
 
 
     this.animate = function () {
-        this.x = this.x + this.xVel
-        this.y = this.y + this.yVel
+        if (this.x + this.xVel > 0 && this.x + this.xVel < 300){
+            this.x = this.x + this.xVel
+        }
+        if (this.y + this.yVel > 80 && this.y + this.yVel < 150){
+            this.y = this.y + this.yVel
+        }
         ctx.drawImage(heroImg, this.x, this.y, 10, 10)
     }
 }
+function Bullet(x, y) {
+    this.x = x
+    this.y = y
+    this.xVel = 0
+    this.yVel = -1
+
+
+
+    this.animate = function () {
+        ctx.beginPath()
+        this.y = this.y + this.yVel
+        ctx.fillStyle="blue"
+        ctx.arc(this.x, this.y, 2, 0, 2*Math.PI, false)
+        ctx.fill()
+    }
+
+}
+
+
+
+
+
+
+
+
 
 function BadGuy(x,y) {
     this.x = x
@@ -28,6 +57,7 @@ function BadGuy(x,y) {
         this.x = this.x + this.xVel
         this.y = this.y + this.yVel
         ctx.drawImage(badImg, this.x, this.y, 15, 15)
+        ctx.fillRect(this.x, this.y, 15, 15)
     }
 }
 const hero1 = new Hero(150,100)
@@ -42,16 +72,22 @@ window.addEventListener("keyup" , function(event) {
     hero1.xVel = 0
     hero1.yVel = 0
 })
+let bullets = []
 
 window.addEventListener("keydown" , function(event) {
+    console.log(event.key)
     if (event.key == 'w') {
-        hero1.yVel = -1
+        hero1.yVel = -2
     } else if (event.key == 'a'){
-        hero1.xVel = -1
+        hero1.xVel = -2
     } else if (event.key == 's'){
-        hero1.yVel = 1
+        hero1.yVel = 2
     } else if (event.key == 'd'){
-        hero1.xVel = 1
+        hero1.xVel = 2
+    } else if (event.key == ' '){
+        const bullet = new Bullet(hero1.x + 5, hero1.y + 5)
+
+        bullets.push(bullet)      
     }
 })
 
@@ -62,6 +98,19 @@ function someSortOfFunction() {
     hero1.animate()
     aliens.forEach(alien => {
         alien.animate()
+    })
+
+    bullets.forEach(bullet => {
+        bullet.animate()
+    })
+    bullets = bullets.filter(function (bullet){
+        if (bullet.y <= 0){
+            return false
+        } else if (bullet.y > 500){
+            return false
+        } else {
+            return true
+        }
     })
     requestAnimationFrame(someSortOfFunction)
 }
