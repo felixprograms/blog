@@ -11,8 +11,6 @@ function Hero(x, y) {
     this.xVel = 0
     this.yVel = 0
 
-
-
     this.animate = function () {
         if (this.x + this.xVel > 0 && this.x + this.xVel < 300){
             this.x = this.x + this.xVel
@@ -28,8 +26,7 @@ function Bullet(x, y) {
     this.y = y
     this.xVel = 0
     this.yVel = -1
-
-
+    this.isAlive = true
 
     this.animate = function () {
         ctx.beginPath()
@@ -38,22 +35,14 @@ function Bullet(x, y) {
         ctx.arc(this.x, this.y, 2, 0, 2*Math.PI, false)
         ctx.fill()
     }
-
 }
-
-
-
-
-
-
-
-
 
 function BadGuy(x,y) {
     this.x = x
     this.y = y
     this.xVel = 0
     this.yVel = 0
+    this.isAlive = true
     this.animate = function () {
         this.x = this.x + this.xVel
         this.y = this.y + this.yVel
@@ -110,16 +99,20 @@ function someSortOfFunction() {
         alien.animate()
     })
 
-    survivingAliens = []
     aliens.forEach(alien => {
-        if (!bullets.some(bullet => alien.isHit(bullet.x, bullet.y))) {
-            survivingAliens.push(alien)
-        }
+        bullets.forEach((bullet) => {
+            if (alien.isHit(bullet.x, bullet.y)) {
+                bullet.isAlive = false
+                alien.isAlive = false
+            }
+        })
     })
-    aliens = survivingAliens
+    aliens = aliens.filter(alien => alien.isAlive)
+    bullets = bullets.filter(bullet => bullet.isAlive)
     bullets.forEach(bullet => {
         bullet.animate()
     })
+
     bullets = bullets.filter(function (bullet){
         if (bullet.y <= 0){
             return false
