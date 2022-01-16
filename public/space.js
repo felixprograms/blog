@@ -2,6 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const badImg = new Image()
 const heroImg = new Image()
+let pts = 0
 heroImg.src = '/hero.jpeg'
 badImg.src = '/alien.jpeg'
 function Hero(x, y) {
@@ -58,10 +59,19 @@ function BadGuy(x,y) {
         this.y = this.y + this.yVel
         ctx.drawImage(badImg, this.x, this.y, 15, 15)
         ctx.fillRect(this.x, this.y, 15, 15)
+        
+    }
+    this.isHit = function (x,y) {
+        if (x >= this.x && x <= this.x + 15 && y >= this.y && y <= this.y + 15){
+            return true
+        } else {
+            return false
+        }
+
     }
 }
 const hero1 = new Hero(150,100)
-const aliens = []
+let aliens = []
 for (let y = 0; y < 3; y += 1) {
     for (let i = 0; i < 15; i += 1) {
         const alien = new BadGuy(0 + i * 20, y * 20)
@@ -100,6 +110,13 @@ function someSortOfFunction() {
         alien.animate()
     })
 
+    survivingAliens = []
+    aliens.forEach(alien => {
+        if (!bullets.some(bullet => alien.isHit(bullet.x, bullet.y))) {
+            survivingAliens.push(alien)
+        }
+    })
+    aliens = survivingAliens
     bullets.forEach(bullet => {
         bullet.animate()
     })
