@@ -21,6 +21,7 @@ function Hero(x, y) {
         ctx.drawImage(heroImg, this.x, this.y, 10, 10)
     }
 }
+let audioObj = new Audio('/explosion.wav')
 function Bullet(x, y) {
     this.x = x
     this.y = y
@@ -52,6 +53,8 @@ function BadGuy(x,y) {
     }
     this.isHit = function (x,y) {
         if (x >= this.x && x <= this.x + 15 && y >= this.y && y <= this.y + 15){
+            pts += 50
+            document.getElementById("pts").innerHTML = pts
             return true
         } else {
             return false
@@ -104,6 +107,7 @@ function someSortOfFunction() {
             if (alien.isHit(bullet.x, bullet.y)) {
                 bullet.isAlive = false
                 alien.isAlive = false
+                audioObj.play()
             }
         })
     })
