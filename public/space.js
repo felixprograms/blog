@@ -10,7 +10,16 @@ function Hero(x, y) {
     this.y = y
     this.xVel = 0
     this.yVel = 0
-
+    this.liveCounter = 3
+    this.isHit = function (x,y) {
+        if (x >= this.x && x <= this.x + 15 && y >= this.y && y <= this.y + 15){
+            return true
+        } else {
+            return false
+        }
+    }
+    this.isAlive = true
+    
     this.animate = function () {
         if (this.x + this.xVel > 0 && this.x + this.xVel < 300){
             this.x = this.x + this.xVel
@@ -22,17 +31,24 @@ function Hero(x, y) {
     }
 }
 let audioObj = new Audio('/explosion.wav')
-function Bullet(x, y) {
+function Bullet(x, y, xVel=0, yVel=0, hurtsAlien=false) {
     this.x = x
     this.y = y
-    this.xVel = 0
-    this.yVel = -1
+    this.xVel = xVel
+    this.yVel = yVel
     this.isAlive = true
+    this.hurtsAlien = hurtsAlien
+    
 
     this.animate = function () {
         ctx.beginPath()
+        this.x = this.x + this.xVel
         this.y = this.y + this.yVel
-        ctx.fillStyle="blue"
+        if (this.hurtsAlien) {
+            ctx.fillStyle="blue"
+        } else {
+            ctx.fillStyle="red"
+        }
         ctx.arc(this.x, this.y, 2, 0, 2*Math.PI, false)
         ctx.fill()
     }
@@ -48,7 +64,6 @@ function BadGuy(x,y) {
         this.x = this.x + this.xVel
         this.y = this.y + this.yVel
         ctx.drawImage(badImg, this.x, this.y, 15, 15)
-        ctx.fillRect(this.x, this.y, 15, 15)
         
     }
     this.isHit = function (x,y) {
@@ -78,6 +93,9 @@ let bullets = []
 
 window.addEventListener("keydown" , function(event) {
     console.log(event.key)
+    if (hero1.isAlive == false){
+        return
+    }
     if (event.key == 'w') {
         hero1.yVel = -2
     } else if (event.key == 'a'){
@@ -87,26 +105,42 @@ window.addEventListener("keydown" , function(event) {
     } else if (event.key == 'd'){
         hero1.xVel = 2
     } else if (event.key == ' '){
-        const bullet = new Bullet(hero1.x + 5, hero1.y + 5)
-
+        const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -1, true)
+        enemyShoots()
         bullets.push(bullet)      
     }
 })
+
+function enemyShoots() {
+    const randAlien = aliens[getRandomInt(aliens.length)]
+    const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
+    bullets.push(bullet) 
+}
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
 
     
-    hero1.animate()
+    if (hero1.isAlive) {
+        hero1.animate()
+    }
     aliens.forEach(alien => {
         alien.animate()
     })
-
+    if (hero1.liveCounter == 0){
+        hero1.isAlive = false
+    }
     aliens.forEach(alien => {
         bullets.forEach((bullet) => {
-            if (alien.isHit(bullet.x, bullet.y)) {
+            if (bullet.hurtsAlien && alien.isHit(bullet.x, bullet.y)) {
                 bullet.isAlive = false
                 alien.isAlive = false
+                audioObj.play()
+            }
+            if (bullet.hurtsAlien == false && hero1.isHit(bullet.x, bullet.y)){
+                hero1.liveCounter -= 1
+                document.getElementById("lives").innerHTML = hero1.liveCounter
+                bullet.isAlive = false
                 audioObj.play()
             }
         })
