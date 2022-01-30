@@ -2,8 +2,10 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const badImg = new Image()
 const heroImg = new Image()
-let shooting_cooldown = 0
+let shootingCooldown = 0
 let pts = 0
+let lost = false
+let won = false
 heroImg.src = '/hero.jpeg'
 badImg.src = '/alien.jpeg'
 function Hero(x, y) {
@@ -11,9 +13,9 @@ function Hero(x, y) {
     this.y = y
     this.xVel = 0
     this.yVel = 0
-    this.liveCounter = 3
+    this.liveCounter = 5
     this.isHit = function (x,y) {
-        if (x >= this.x && x <= this.x + 15 && y >= this.y && y <= this.y + 15){
+        if (x >= this.x && x <= this.x + 10 && y >= this.y && y <= this.y + 15){
             return true
         } else {
             return false
@@ -29,6 +31,8 @@ function Hero(x, y) {
             this.y = this.y + this.yVel
         }
         ctx.drawImage(heroImg, this.x, this.y, 10, 10)
+    
+
     }
 }
 let audioObj = new Audio('/explosion.wav')
@@ -106,9 +110,9 @@ window.addEventListener("keydown" , function(event) {
     } else if (event.key == 'd'){
         hero1.xVel = 2
     } else if (event.key == ' '){
-        if (shooting_cooldown <= 0){
+        if (shootingCooldown <= 0){
             const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -1, true)
-            shooting_cooldown += 1
+            shootingCooldown += 1
             bullets.push(bullet)      
         }
             
@@ -120,19 +124,25 @@ function getRandomInteger(x){
 }
 function enemyShoots() {
     const randAlien = aliens[getRandomInteger(aliens.length)]
-    if (getRandomInteger(10) == 1) {
-        const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
-        bullets.push(bullet)
+    if (aliens.length != 0){
+        if (getRandomInteger(10) == 1){
+            const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
+            bullets.push(bullet)
+        }
+        
 
-
+    } else {
+        won = true
     }
+
+
 }
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
     enemyShoots()
-    if (shooting_cooldown >= 0){
-        shooting_cooldown -= 0.05
+    if (shootingCooldown >= 0){
+        shootingCooldown -= 0.05
 
     }
     if (hero1.isAlive) {
@@ -152,10 +162,14 @@ function someSortOfFunction() {
                 audioObj.play()
             }
             if (bullet.hurtsAlien == false && hero1.isHit(bullet.x, bullet.y)){
+                
                 hero1.liveCounter -= 1
+                
                 document.getElementById("lives").innerHTML = hero1.liveCounter
                 bullet.isAlive = false
+                bullets = []
                 audioObj.play()
+                return
             }
         })
     })
@@ -174,7 +188,26 @@ function someSortOfFunction() {
             return true
         }
     })
-    requestAnimationFrame(someSortOfFunction)
+    if (hero1.liveCounter > 0){
+        
+        requestAnimationFrame(someSortOfFunction)
+
+    } else {
+        lost = true
+    }
+    if (won == true){
+        ctx.fillStyle = "black"
+        ctx.font = '48px serif';
+        ctx.fillText('You Won', 30, 85);
+    }
+    if (lost == true){
+        ctx.fillStyle = "black"
+
+        ctx.font = '48px serif';
+        ctx.fillText('Game Over', 30, 85);
+        
+    }
 }
+
 
 someSortOfFunction()
