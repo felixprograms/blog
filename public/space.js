@@ -2,6 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const badImg = new Image()
 const heroImg = new Image()
+let shooting_cooldown = 0
 let pts = 0
 heroImg.src = '/hero.jpeg'
 badImg.src = '/alien.jpeg'
@@ -21,10 +22,10 @@ function Hero(x, y) {
     this.isAlive = true
     
     this.animate = function () {
-        if (this.x + this.xVel > 0 && this.x + this.xVel < 300){
+        if (this.x + this.xVel > 0 && this.x + this.xVel < 290){
             this.x = this.x + this.xVel
         }
-        if (this.y + this.yVel > 80 && this.y + this.yVel < 150){
+        if (this.y + this.yVel > 80 && this.y + this.yVel < 140){
             this.y = this.y + this.yVel
         }
         ctx.drawImage(heroImg, this.x, this.y, 10, 10)
@@ -105,22 +106,35 @@ window.addEventListener("keydown" , function(event) {
     } else if (event.key == 'd'){
         hero1.xVel = 2
     } else if (event.key == ' '){
-        const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -1, true)
-        enemyShoots()
-        bullets.push(bullet)      
+        if (shooting_cooldown <= 0){
+            const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -1, true)
+            shooting_cooldown += 1
+            bullets.push(bullet)      
+        }
+            
     }
 })
 
+function getRandomInteger(x){
+    return Math.floor(Math.random() * x)
+}
 function enemyShoots() {
-    const randAlien = aliens[getRandomInt(aliens.length)]
-    const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
-    bullets.push(bullet) 
+    const randAlien = aliens[getRandomInteger(aliens.length)]
+    if (getRandomInteger(10) == 1) {
+        const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
+        bullets.push(bullet)
+
+
+    }
 }
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
+    enemyShoots()
+    if (shooting_cooldown >= 0){
+        shooting_cooldown -= 0.05
 
-    
+    }
     if (hero1.isAlive) {
         hero1.animate()
     }
