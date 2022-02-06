@@ -7,16 +7,17 @@ let pts = 0
 let lost = false
 let won = false
 heroImg.src = '/hero.jpeg'
-badImg.src = '/alien.jpeg'
+badImg.src = '/alien.png'
 function Hero(x, y) {
     this.x = x
     this.y = y
     this.xVel = 0
     this.yVel = 0
-    this.liveCounter = 5
+    this.liveCounter = 3
     this.isHit = function (x,y) {
         if (x >= this.x && x <= this.x + 10 && y >= this.y && y <= this.y + 15){
             return true
+            
         } else {
             return false
         }
@@ -64,6 +65,7 @@ function BadGuy(x,y) {
     this.y = y
     this.xVel = 0
     this.yVel = 0
+    this.cd = 0
     this.isAlive = true
     this.animate = function () {
         this.x = this.x + this.xVel
@@ -85,7 +87,7 @@ function BadGuy(x,y) {
 const hero1 = new Hero(150,100)
 let aliens = []
 for (let y = 0; y < 3; y += 1) {
-    for (let i = 0; i < 15; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
         const alien = new BadGuy(0 + i * 20, y * 20)
         aliens.push(alien)
     }
@@ -111,7 +113,7 @@ window.addEventListener("keydown" , function(event) {
         hero1.xVel = 2
     } else if (event.key == ' '){
         if (shootingCooldown <= 0){
-            const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -1, true)
+            const bullet = new Bullet(hero1.x + 5, hero1.y + 5, 0, -3, true)
             shootingCooldown += 1
             bullets.push(bullet)      
         }
@@ -126,7 +128,7 @@ function enemyShoots() {
     const randAlien = aliens[getRandomInteger(aliens.length)]
     if (aliens.length != 0){
         if (getRandomInteger(10) == 1){
-            const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 1)
+            const bullet = new Bullet(randAlien.x + 5, randAlien.y + 5, 0, 3)
             bullets.push(bullet)
         }
         
@@ -137,12 +139,22 @@ function enemyShoots() {
 
 
 }
+let postScore = function(score) {
+    fetch("/game/highscore", {
+    method: "POST",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ score: score, game: 'space' })
+    }).then(res => {
+    console.log("Request complete! response:", res);
+    })
+}
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
     enemyShoots()
     if (shootingCooldown >= 0){
-        shootingCooldown -= 0.05
+        shootingCooldown -= 0.04
+
 
     }
     if (hero1.isAlive) {
@@ -173,6 +185,22 @@ function someSortOfFunction() {
             }
         })
     })
+    aliens.forEach(alien => {
+        if (alien.x <= 10){
+            alien.xVel = 1.5
+        } else if (alien.x >= 275) {
+            alien.xVel = -1.5
+        }
+        if (alien.xVel == 0){
+            if (getRandomInteger(2) == 1){
+                alien.xVel = -1.5
+            } else { 
+                alien.xVel = 1.5
+            }
+        }
+            
+    })
+    
     aliens = aliens.filter(alien => alien.isAlive)
     bullets = bullets.filter(bullet => bullet.isAlive)
     bullets.forEach(bullet => {
@@ -199,12 +227,15 @@ function someSortOfFunction() {
         ctx.fillStyle = "black"
         ctx.font = '48px serif';
         ctx.fillText('You Won', 30, 85);
+        postScore(pts)
     }
     if (lost == true){
         ctx.fillStyle = "black"
 
         ctx.font = '48px serif';
         ctx.fillText('Game Over', 30, 85);
+        postScore(pts)
+
         
     }
 }
