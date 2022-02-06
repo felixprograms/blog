@@ -2,12 +2,25 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const badImg = new Image()
 const heroImg = new Image()
+const explosion = new Image()
+
 let shootingCooldown = 0
 let pts = 0
 let lost = false
 let won = false
 heroImg.src = '/hero.jpeg'
 badImg.src = '/alien.png'
+explosion.src = '/explosion.png'
+function Explosion(x,y){
+    this.x = x
+    this.y = y
+    this.xVel = 0
+    this.yVel = 0
+    this.timeIWasBorn = new Date()
+    this.animate = function (){
+        ctx.drawImage(explosion, this.x, this.y, 10, 10)
+    }
+}
 function Hero(x, y) {
     this.x = x
     this.y = y
@@ -86,6 +99,7 @@ function BadGuy(x,y) {
 }
 const hero1 = new Hero(150,100)
 let aliens = []
+let explosions = []
 for (let y = 0; y < 3; y += 1) {
     for (let i = 0; i < 4; i += 1) {
         const alien = new BadGuy(0 + i * 20, y * 20)
@@ -171,12 +185,15 @@ function someSortOfFunction() {
             if (bullet.hurtsAlien && alien.isHit(bullet.x, bullet.y)) {
                 bullet.isAlive = false
                 alien.isAlive = false
+                let explosion = new Explosion(alien.x, alien.y)
+                explosions.push(explosion)    
                 audioObj.play()
             }
             if (bullet.hurtsAlien == false && hero1.isHit(bullet.x, bullet.y)){
                 
                 hero1.liveCounter -= 1
-                
+                let explosion = new Explosion(hero1.x, hero1.y)
+                explosions.push(explosion)
                 document.getElementById("lives").innerHTML = hero1.liveCounter
                 bullet.isAlive = false
                 bullets = []
@@ -205,6 +222,9 @@ function someSortOfFunction() {
     bullets = bullets.filter(bullet => bullet.isAlive)
     bullets.forEach(bullet => {
         bullet.animate()
+    })
+    explosions.forEach(explosion => {
+        explosion.animate()
     })
 
     bullets = bullets.filter(function (bullet){
