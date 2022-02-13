@@ -6,6 +6,7 @@ const explosion = new Image()
 
 let shootingCooldown = 0
 let pts = 0
+let time = 100
 let lost = false
 let won = false
 heroImg.src = '/hero.jpeg'
@@ -165,6 +166,7 @@ let postScore = function(score) {
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
+    time -= 0.005
     enemyShoots()
     if (shootingCooldown >= 0){
         shootingCooldown -= 0.04
@@ -217,7 +219,14 @@ function someSortOfFunction() {
         }
             
     })
-    
+    explosions = explosions.filter(function(explosion){
+        
+        if ((new Date() - explosion.timeIWasBorn) >= 2000){
+            return false
+        } else {
+            return true
+        }
+    })
     aliens = aliens.filter(alien => alien.isAlive)
     bullets = bullets.filter(bullet => bullet.isAlive)
     bullets.forEach(bullet => {
@@ -251,10 +260,10 @@ function someSortOfFunction() {
     }
     if (lost == true){
         ctx.fillStyle = "black"
-
+        let points = Math.floor(pts + (time) * (hero1.liveCounter + 2) / 1.5)
         ctx.font = '48px serif';
         ctx.fillText('Game Over', 30, 85);
-        postScore(pts)
+        postScore(points)
 
         
     }
