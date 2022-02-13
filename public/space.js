@@ -107,10 +107,6 @@ for (let y = 0; y < 3; y += 1) {
         aliens.push(alien)
     }
 }
-window.addEventListener("keyup" , function(event) {
-    hero1.xVel = 0
-    hero1.yVel = 0
-})
 let bullets = []
 
 window.addEventListener("keydown" , function(event) {
@@ -253,13 +249,13 @@ function someSortOfFunction() {
         lost = true
     }
     if (won == true){
-        ctx.fillStyle = "black"
+        ctx.fillStyle = "white"
         ctx.font = '48px serif';
         ctx.fillText('You Won', 30, 85);
         postScore(pts)
     }
     if (lost == true){
-        ctx.fillStyle = "black"
+        ctx.fillStyle = "white"
         let points = Math.floor(pts + (time) * (hero1.liveCounter + 2) / 1.5)
         ctx.font = '48px serif';
         ctx.fillText('Game Over', 30, 85);
