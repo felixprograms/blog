@@ -9,7 +9,7 @@ let pts = 0
 let time = 100
 let lost = false
 let won = false
-heroImg.src = '/hero.jpeg'
+heroImg.src = '/hero.png'
 badImg.src = '/alien.png'
 explosion.src = '/explosion.png'
 function Explosion(x,y){
