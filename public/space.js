@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const badImg = new Image()
 const heroImg = new Image()
 const explosion = new Image()
-
+let gameStarted = false
 let shootingCooldown = 0
 let pts = 0
 let time = 100
@@ -114,6 +114,9 @@ window.addEventListener("keydown" , function(event) {
     if (hero1.isAlive == false){
         return
     }
+    if (event.key == 'Enter'){
+        gameStarted = true
+    }
     if (event.key == 'w') {
         hero1.yVel = -2
     } else if (event.key == 'a'){
@@ -159,9 +162,7 @@ let postScore = function(score) {
     console.log("Request complete! response:", res);
     })
 }
-
-function someSortOfFunction() {
-    void ctx.clearRect(0, 0, 1000, 1000);
+function gamePlay(){
     time -= 0.005
     enemyShoots()
     if (shootingCooldown >= 0){
@@ -261,6 +262,29 @@ function someSortOfFunction() {
         ctx.fillText('Game Over', 30, 85);
         postScore(points)
 
+        
+    }
+}
+
+function gameIntro() {
+    ctx.fillStyle = "white"
+    ctx.font = '24px serif';
+    
+    ctx.fillText("Press 'Enter' to start", 30, 85);
+    ctx.font = '48px serif'
+    ctx.fillText('Some Game', 30, 55);
+    requestAnimationFrame(someSortOfFunction)
+
+
+}
+
+function someSortOfFunction() {
+    void ctx.clearRect(0, 0, 1000, 1000);
+    if (gameStarted){
+        gamePlay()
+        
+    } else {
+        gameIntro()
         
     }
 }
