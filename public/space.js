@@ -253,14 +253,14 @@ function gamePlay(){
         ctx.fillStyle = "white"
         ctx.font = '48px serif';
         ctx.fillText('You Won', 30, 85);
-        postScore(pts)
+        return postScore(pts)
     }
     if (lost == true){
         ctx.fillStyle = "white"
         let points = Math.floor(pts + (time) * (hero1.liveCounter + 2) / 1.5)
         ctx.font = '48px serif';
         ctx.fillText('Game Over', 30, 85);
-        postScore(points)
+        return postScore(points)
 
         
     }
@@ -280,7 +280,7 @@ function gameIntro() {
 
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
-    if (gameStarted){
+    if (gameStarted && won == false){
         gamePlay()
         
     } else {
