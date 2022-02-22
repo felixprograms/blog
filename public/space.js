@@ -9,6 +9,10 @@ let pts = 0
 let time = 100
 let lost = false
 let won = false
+let stars = []
+for (let i = 0; i < 49; i += 1) {
+    stars.push([getRandomInteger(300), getRandomInteger(150)])
+}
 heroImg.src = '/hero.png'
 badImg.src = '/alien.png'
 explosion.src = '/explosion.png'
@@ -21,6 +25,19 @@ function Explosion(x,y){
     this.animate = function (){
         ctx.drawImage(explosion, this.x, this.y, 10, 10)
     }
+}
+function renderStars() {
+    ctx.fillStyle="white"
+    let newStars = []
+    stars.forEach(star => {
+        ctx.fillRect(star[0], star[1], 2, 2)
+        if (star[1] > 150) {
+            newStars.push([getRandomInteger(300), 0])
+        } else {
+            newStars.push([star[0], star[1] + 1])
+        }
+    })
+    stars = newStars
 }
 function Hero(x, y) {
     this.x = x
@@ -170,6 +187,7 @@ function gamePlay(){
 
 
     }
+    
     if (hero1.isAlive) {
         hero1.animate()
     }
@@ -252,8 +270,10 @@ function gamePlay(){
     if (won == true){
         ctx.fillStyle = "white"
         ctx.font = '48px serif';
+        let points = Math.floor(pts + (time) * (hero1.liveCounter + 2) / 1.5)
+
         ctx.fillText('You Won', 30, 85);
-        return postScore(pts)
+        return postScore(points)
     }
     if (lost == true){
         ctx.fillStyle = "white"
@@ -281,8 +301,8 @@ function gameIntro() {
 function someSortOfFunction() {
     void ctx.clearRect(0, 0, 1000, 1000);
     if (gameStarted && won == false){
+        renderStars()
         gamePlay()
-        
     } else {
         gameIntro()
         
