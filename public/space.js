@@ -5,6 +5,7 @@ const hurtBadImg = new Image()
 const heroImg = new Image()
 const explosion = new Image()
 let gameStarted = false
+let level = 0
 let shootingCooldown = 0
 let pts = 0
 let time = 100
@@ -46,7 +47,7 @@ function Hero(x, y) {
     this.y = y
     this.xVel = 0
     this.yVel = 0
-    this.liveCounter = 3
+    this.liveCounter = 3000
     this.isHit = function (x,y) {
         if (x >= this.x && x <= this.x + 10 && y >= this.y && y <= this.y + 15){
             return true
@@ -132,12 +133,15 @@ function BadGuy(x,y,hp=3) {
 const hero1 = new Hero(150,100)
 let aliens = []
 let explosions = []
-for (let y = 0; y < 3; y += 1) {
-    for (let i = 0; i < 4; i += 1) {
-        const alien = new BadGuy(0 + i * 20, y * 20)
-        aliens.push(alien)
+function generateBadGuys (r, c){
+    for (let y = 0; y < r; y += 1) {
+        for (let i = 0; i < c; i += 1) {
+            const alien = new BadGuy(0 + i * 20, y * 20)
+            aliens.push(alien)
+        }
     }
 }
+generateBadGuys(1,1)
 const alien = new BadGuy(122,122,5)
 let bullets = []
 
@@ -194,9 +198,11 @@ let postScore = function(score) {
     console.log("Request complete! response:", res);
     })
 }
+
 function gamePlay(){
     time -= 0.005
     enemyShoots()
+    
     if (shootingCooldown >= 0){
         shootingCooldown -= 0.04
 
@@ -299,6 +305,19 @@ function gamePlay(){
 
         
     }
+    if (aliens.length == 0){
+        if (level == 0){
+            generateBadGuys(1,5)
+            level += 1
+        } else if (level == 1){
+            generateBadGuys(2,4)
+            level += 1
+        } else if (level == 2){
+            generateBadGuys(3,5)
+            level += 1
+        }
+    }
+    
 }
 
 function gameIntro() {
@@ -323,45 +342,6 @@ function someSortOfFunction() {
         
     }
 }
-// var canvas = document.getElementById("canvas");
-// var ctx = canvas.getContext("2d");
-
-// var canvas2 = document.createElement('canvas');
-// var ctx2 = canvas2.getContext("2d");
-
-// var img = new Image();
-// img.crossOrigin = "anonymous";
-// img.onload = start;
-// img.src = "https://i.imgur.com/oiH1gyx.png";
-
-// var img2 = new Image();
-// img2.crossOrigin = "anonymous";
-// img2.onload = start;
-// img2.src = "https://i.imgur.com/oiH1gyx.png";
-
-// function start() {
-
-// // shift blueish colors to greenish colors
-// ctx.drawImage(img, 0, 0, 150, 150);
-
-// grayscale();
-// ctx.drawImage(img, 0, 150, 150, 150);
-
-// }
-// var grayscale = function() {
-// ctx2.drawImage(img, 150, 0, 150, 150);
-// const imageData = ctx2.getImageData(0, 0, canvas.width, canvas.height);
-// const data = imageData.data;
-// for (var i = 0; i < data.length; i += 4) {
-//     data[i] = data[i] + 50; // red
-//     // data[i + 1] = 0; // green
-//     // data[i + 2] = 0; // blue
-//     // data[i + 3] = 255
-// }
-// ctx2.putImageData(imageData, 0, 0);
-// ctx.drawImage( ctx2.canvas, 0, 0 );
-
-// };
 
 
 someSortOfFunction()
