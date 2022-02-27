@@ -1,6 +1,7 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const badImg = new Image()
+const hurtBadImg = new Image()
 const heroImg = new Image()
 const explosion = new Image()
 let gameStarted = false
@@ -15,6 +16,7 @@ for (let i = 0; i < 49; i += 1) {
 }
 heroImg.src = '/hero.png'
 badImg.src = '/alien.png'
+hurtBadImg.src = '/alien-hurt.png'
 explosion.src = '/explosion.png'
 function Explosion(x,y){
     this.x = x
@@ -91,22 +93,34 @@ function Bullet(x, y, xVel=0, yVel=0, hurtsAlien=false) {
     }
 }
 
-function BadGuy(x,y) {
+function BadGuy(x,y,hp=3) {
     this.x = x
     this.y = y
     this.xVel = 0
     this.yVel = 0
     this.cd = 0
     this.isAlive = true
+    this.hp = hp
+    
     this.animate = function () {
+        
+                
+           
         this.x = this.x + this.xVel
         this.y = this.y + this.yVel
-        ctx.drawImage(badImg, this.x, this.y, 15, 15)
-        
+        if (hp == 3){
+            ctx.drawImage(badImg, this.x, this.y, 15, 15)
+
+        } else if (hp <= 2){
+            ctx.drawImage(hurtBadImg, this.x, this.y, 15, 15)
+        }
+
     }
     this.isHit = function (x,y) {
         if (x >= this.x && x <= this.x + 15 && y >= this.y && y <= this.y + 15){
             pts += 50
+            hp -= 1
+
             document.getElementById("pts").innerHTML = pts
             return true
         } else {
@@ -124,6 +138,7 @@ for (let y = 0; y < 3; y += 1) {
         aliens.push(alien)
     }
 }
+const alien = new BadGuy(122,122,5)
 let bullets = []
 
 window.addEventListener("keydown" , function(event) {
@@ -201,7 +216,10 @@ function gamePlay(){
         bullets.forEach((bullet) => {
             if (bullet.hurtsAlien && alien.isHit(bullet.x, bullet.y)) {
                 bullet.isAlive = false
-                alien.isAlive = false
+                alien.hp = alien.hp - 1
+                if (alien.hp <= 0) {
+                    alien.isAlive = false
+                }
                 let explosion = new Explosion(alien.x, alien.y)
                 explosions.push(explosion)    
                 audioObj.play()
@@ -221,16 +239,13 @@ function gamePlay(){
     })
     aliens.forEach(alien => {
         if (alien.x <= 10){
-            alien.xVel = 1.5
+            alien.xVel = 2
         } else if (alien.x >= 275) {
-            alien.xVel = -1.5
+            alien.xVel = -2
         }
         if (alien.xVel == 0){
-            if (getRandomInteger(2) == 1){
-                alien.xVel = -1.5
-            } else { 
-                alien.xVel = 1.5
-            }
+            alien.xVel = 2
+          
         }
             
     })
@@ -308,6 +323,45 @@ function someSortOfFunction() {
         
     }
 }
+// var canvas = document.getElementById("canvas");
+// var ctx = canvas.getContext("2d");
+
+// var canvas2 = document.createElement('canvas');
+// var ctx2 = canvas2.getContext("2d");
+
+// var img = new Image();
+// img.crossOrigin = "anonymous";
+// img.onload = start;
+// img.src = "https://i.imgur.com/oiH1gyx.png";
+
+// var img2 = new Image();
+// img2.crossOrigin = "anonymous";
+// img2.onload = start;
+// img2.src = "https://i.imgur.com/oiH1gyx.png";
+
+// function start() {
+
+// // shift blueish colors to greenish colors
+// ctx.drawImage(img, 0, 0, 150, 150);
+
+// grayscale();
+// ctx.drawImage(img, 0, 150, 150, 150);
+
+// }
+// var grayscale = function() {
+// ctx2.drawImage(img, 150, 0, 150, 150);
+// const imageData = ctx2.getImageData(0, 0, canvas.width, canvas.height);
+// const data = imageData.data;
+// for (var i = 0; i < data.length; i += 4) {
+//     data[i] = data[i] + 50; // red
+//     // data[i + 1] = 0; // green
+//     // data[i + 2] = 0; // blue
+//     // data[i + 3] = 255
+// }
+// ctx2.putImageData(imageData, 0, 0);
+// ctx.drawImage( ctx2.canvas, 0, 0 );
+
+// };
 
 
 someSortOfFunction()
